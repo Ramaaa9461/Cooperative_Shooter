@@ -12,28 +12,25 @@ public class movement : MonoBehaviour
     [SerializeField] float velocityX;
     [SerializeField] float velocityY;
 
-    Vector3 dir;
-    Rigidbody rigidbody;
+    CharacterController characterController;
 
-    private void Start()
+    void Awake()
     {
-        rigidbody = GetComponent<Rigidbody>();
+        characterController = GetComponent<CharacterController>();
     }
 
     void Update()
     {
         if (Input.GetKey(Up))
         {
-        
-            rigidbody.MovePosition(transform.forward * velocityY * Time.deltaTime;
+            characterController.SimpleMove(transform.forward * velocityY);
         }
         if (Input.GetKey(Down))
         {
-            rigidbody.MovePosition(-transform.forward * velocityY * Time.deltaTime);
+            characterController.SimpleMove(-transform.forward * velocityY);
         }
         if (Input.GetKey(Left))
         {
-          //  rigidbody.MoveRotation()
             transform.eulerAngles += Vector3.down * velocityX * Time.deltaTime;
         }
         if (Input.GetKey(Right))
