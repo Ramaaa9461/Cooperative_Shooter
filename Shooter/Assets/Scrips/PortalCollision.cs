@@ -10,7 +10,6 @@ public class PortalCollision : MonoBehaviour
     public void teleportPlayer(Transform player)
     {
         player.position = new Vector3(exit.transform.position.x, player.transform.position.y, exit.position.z + (exit.forward.z + offset));
-        Debug.Log(exit.transform.position);
     }
 
 }

@@ -44,9 +44,7 @@ public class movement : MonoBehaviour
     {
         if (hit.gameObject.tag == "Portal")
         {
-          hit.gameObject.GetComponent<PortalCollision>().teleportPlayer(transform);
-          //  hit.transform.position = Vector3.zero;
-        Debug.Log("Colisiona");
+            hit.gameObject.GetComponent<PortalCollision>().teleportPlayer(transform);
         }
     }
 }
