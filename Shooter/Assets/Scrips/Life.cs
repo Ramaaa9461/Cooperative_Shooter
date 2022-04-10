@@ -11,12 +11,6 @@ public class Life : MonoBehaviour
         currentLife = initLife;
     }
 
-    void Update()
-    {
-        
-
-    }
-
     public void recibeDamage(int damage)
     {
         if (currentLife > 0) 

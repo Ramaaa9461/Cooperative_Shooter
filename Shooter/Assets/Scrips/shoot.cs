@@ -7,11 +7,12 @@ public class shoot : MonoBehaviour
 {
     [SerializeField] KeyCode shootKey;
     [SerializeField] Transform weapon;
+    [SerializeField] Transform muzzle;
+    [SerializeField] GameObject flashEffect;
     [SerializeField] int damage = 10;
 
 
     Vector3 initLocalPositionWeapon;
-    Vector3 initRotationWeapon;
     float recoilForce = 4f;
     RaycastHit hit;
 
@@ -19,7 +20,6 @@ public class shoot : MonoBehaviour
     void Start()
     {
         initLocalPositionWeapon = weapon.localPosition;
-        initRotationWeapon = weapon.eulerAngles;
 
     }
     void Update()
@@ -27,19 +27,23 @@ public class shoot : MonoBehaviour
         if (Input.GetKeyUp(shootKey))
         {
 
-            addRecoilForce();
+            addRecoile();
 
             raycastShoot();
 
         }
+     //  Debug.DrawRay(muzzle.transform.position , muzzle.transform.forward * 100f, Color.black);
 
-        weapon.transform.localPosition = Vector3.Lerp(weapon.transform.localPosition, initLocalPositionWeapon, Time.deltaTime * 5f);
+        weapon.transform.localPosition = Vector3.Lerp(weapon.transform.localPosition,initLocalPositionWeapon, Time.deltaTime * 5f);
     }
 
     private void raycastShoot()
     {
+        GameObject flashWeapon = Instantiate(flashEffect, muzzle.transform.position, Quaternion.Euler(muzzle.forward), weapon.transform);
+        Destroy(flashWeapon, 0.6f);
 
-        if (Physics.Raycast(weapon.position, transform.TransformDirection(Vector3.forward), out hit, 100f))
+        
+        if (Physics.Raycast(muzzle.position, muzzle.forward, out hit, 100f))
         {
             if (hit.transform.gameObject.CompareTag("Player"))
             {
@@ -47,9 +51,10 @@ public class shoot : MonoBehaviour
             }
         }
 
+
     }
 
-    private void addRecoilForce()
+    private void addRecoile()
     {
         weapon.transform.position = weapon.transform.position - weapon.transform.forward * (recoilForce / 50f);
     }
