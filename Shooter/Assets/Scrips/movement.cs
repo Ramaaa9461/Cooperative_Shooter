@@ -39,4 +39,14 @@ public class movement : MonoBehaviour
         }
 
     }
+
+    void OnControllerColliderHit(ControllerColliderHit hit)
+    {
+        if (hit.gameObject.tag == "Portal")
+        {
+          hit.gameObject.GetComponent<PortalCollision>().teleportPlayer(transform);
+          //  hit.transform.position = Vector3.zero;
+        Debug.Log("Colisiona");
+        }
+    }
 }

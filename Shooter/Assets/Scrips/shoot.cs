@@ -18,16 +18,15 @@ public class shoot : MonoBehaviour
             {
                 if (hit.transform.gameObject.CompareTag("Player1") )
                 {
-                    Debug.Log("murio player 1");
-                    
+                    hit.transform.gameObject.GetComponent<Life>().recibeDamage(10);
                 }
                 if (hit.transform.gameObject.CompareTag("Player2"))
                 {
-                    Debug.Log("murio player 2");
+                    hit.transform.gameObject.GetComponent<Life>().recibeDamage(10);
                 }
             }
         }
-                Debug.DrawRay(weapon.position, transform.TransformDirection(Vector3.forward) * 100 , Color.yellow);
+              //  Debug.DrawRay(weapon.position, transform.TransformDirection(Vector3.forward) * 100 , Color.yellow);
 
 
 
