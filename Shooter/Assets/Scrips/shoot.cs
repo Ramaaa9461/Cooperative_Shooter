@@ -5,43 +5,78 @@ using UnityEngine;
 
 public class shoot : MonoBehaviour
 {
+
     [SerializeField] KeyCode shootKey;
+    [SerializeField] KeyCode reloadKey;
     [SerializeField] Transform weapon;
     [SerializeField] Transform muzzle;
     [SerializeField] GameObject flashEffect;
     [SerializeField] GameObject bulletHolePrefab;
     [SerializeField] int damage = 10;
+    [SerializeField] int maxAmmo = 120;
+    [SerializeField] int magCapacity = 30;
 
+    public int currentAmmo { get; private set; }
 
     Vector3 initLocalPositionWeapon;
     float recoilForce = 4f;
     RaycastHit hit;
+    private float reloadTime;
 
-
-    void Start()
+    void Awake()
     {
         initLocalPositionWeapon = weapon.localPosition;
-
+        currentAmmo = maxAmmo;
+        EventManager.current.updateBulletEvent.Invoke(currentAmmo, maxAmmo);
     }
     void Update()
     {
-        if (Input.GetKeyUp(shootKey))
+        if (Input.GetKeyDown(shootKey))
         {
+            if (currentAmmo > 0)
+            {
 
-            addRecoile();
+                raycastShoot();
+                currentAmmo--;
+                EventManager.current.updateBulletEvent.Invoke(currentAmmo, maxAmmo);
+            }
 
-            raycastShoot();
 
+        }
+        if (Input.GetKeyDown(reloadKey))
+        {
+            //Reload();
+            StartCoroutine(ReloadWeapon());
         }
         //  Debug.DrawRay(muzzle.transform.position , muzzle.transform.forward * 100f, Color.black);
 
         weapon.transform.localPosition = Vector3.Lerp(weapon.transform.localPosition, initLocalPositionWeapon, Time.deltaTime * 5f);
     }
+    IEnumerator ReloadWeapon()
+    {
+        yield return new WaitForSeconds(reloadTime);
+        if (maxAmmo > magCapacity)
+        {
+        currentAmmo = magCapacity;
+        }
+
+        maxAmmo -= magCapacity;
+        EventManager.current.updateBulletEvent.Invoke(currentAmmo, maxAmmo);
+    }
+    //private void Reload()
+    //{
+    //    if (currentAmmo < maxAmmo)
+    //    {
+    //        currentAmmo = maxAmmo;
+    //    }
+    //}
 
     private void raycastShoot()
     {
         GameObject flashWeapon = Instantiate(flashEffect, muzzle.transform.position, Quaternion.Euler(muzzle.forward), weapon.transform);
         Destroy(flashWeapon, 0.6f);
+
+        addRecoile();
 
 
         if (Physics.Raycast(muzzle.position, muzzle.forward, out hit, 100f))
