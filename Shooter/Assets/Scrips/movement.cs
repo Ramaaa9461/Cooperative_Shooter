@@ -13,6 +13,9 @@ public class movement : MonoBehaviour
     [SerializeField] float velocityY;
 
     CharacterController characterController;
+    Vector3 directionMove;
+    private float jumpHeight = 1.9f;
+    private float gravityScale = 20f;
 
     void Awake()
     {
@@ -21,22 +24,8 @@ public class movement : MonoBehaviour
 
     void Update()
     {
-        if (Input.GetKey(Up))
-        {
-            characterController.SimpleMove(transform.forward * velocityY);
-        }
-        if (Input.GetKey(Down))
-        {
-            characterController.SimpleMove(-transform.forward * velocityY);
-        }
-        if (Input.GetKey(Left))
-        {
-            transform.eulerAngles += Vector3.down * velocityX * Time.deltaTime;
-        }
-        if (Input.GetKey(Right))
-        {
-            transform.eulerAngles += Vector3.up * velocityX * Time.deltaTime;
-        }
+        Movement();
+
 
     }
 
@@ -46,5 +35,28 @@ public class movement : MonoBehaviour
         {
             hit.gameObject.GetComponent<PortalCollision>().teleportPlayer(transform);
         }
+    }
+
+    void Movement()
+    {
+
+        if (Input.GetKey(Up))
+        {
+            characterController.SimpleMove(transform.forward * velocityY);
+        }
+        if (Input.GetKey(Down))
+        {
+            characterController.SimpleMove(-transform.forward * velocityY);
+        }
+
+        if (Input.GetKey(Left))
+        {
+            transform.eulerAngles += Vector3.down * velocityX * Time.deltaTime;
+        }
+        if (Input.GetKey(Right))
+        {
+            transform.eulerAngles += Vector3.up * velocityX * Time.deltaTime;
+        }
+
     }
 }
